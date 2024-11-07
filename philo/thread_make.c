@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   threads.c                                          :+:      :+:    :+:   */
+/*   thread_make.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:59:10 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/06 13:59:16 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:38:45 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ t_thread	make_thread(t_context *ctx, long id)
 
 	mem_zero(&thread, sizeof(t_thread));
 	args = make_thread_args(ctx, id);
-	if (args == NULL
-		|| pthread_create(&thread.handle, NULL, simulate_thread, args) != 0)
-		return (thread);
 	thread.timestamp = time_now();
+	if (args == NULL || !thread_create(&thread.handle, simulate_thread, args))
+		return (thread);
 	thread.id = id;
 	return (thread);
 }

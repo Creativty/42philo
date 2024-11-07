@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pthread.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 09:49:10 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/07 16:41:20 by aindjare         ###   ########.fr       */
+/*   Created: 2024/11/07 13:20:37 by aindjare          #+#    #+#             */
+/*   Updated: 2024/11/07 14:05:50 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, const char **argv)
+bool	thread_create(pthread_t *handle, t_thread_fn fn, t_thread_args *args)
 {
-	t_config	*cfg;
-	t_context	*ctx;
-	int			retval;
+	void	*(*_fn)(void *);
+	
+	_fn = (void *)fn;
+	return (pthread_create(handle, NULL, _fn, args) == 0);
+}
 
-	cfg = make_config(&argv[1], argc - 1);
-	if (cfg == NULL)
-		return (printf("error: invalid arguments.\n"), 1);
-	ctx = make_context(cfg);
-	if (ctx == NULL)
-		return (printf("error: could initialize context\n"), free(cfg), 1);
-	retval = simulate_context(ctx, cfg);
-	return (delete_context(ctx), free(cfg), retval);
+void	thread_sleep(long duration)
+{
+	long	start;
+
+	if (duration == 0)
+		return ;
+	start = time_now();
+	while (1)
+	{
+		if (time_now() - start >= duration)
+			break ;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:32:36 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/06 13:57:31 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:40:00 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static t_mutex	*make_context_mutexes(long count)
 		return (NULL);
 	while (i < count)
 	{
-		if (pthread_mutex_init(&mtxs[i], NULL) != 0)
+		if (!mutex_create(&mtxs[i]))
 			break ;
 		i++;
 	}
@@ -93,6 +93,7 @@ void	delete_context(t_context *ctx)
 	make_context_mutexes_cleanup(ctx->forks, ctx->cfg->population);
 	make_context_threads_cleanup(ctx, ctx->threads, true);
 	pthread_mutex_destroy(&ctx->printf);
+	pthread_mutex_destroy(&ctx->sync);
 	mem_zero(ctx, sizeof(t_context));
 	free(ctx);
 }
@@ -101,20 +102,26 @@ t_context	*make_context(t_config *cfg)
 {
 	t_context	*ctx;
 
-	if (cfg == NULL)
-		return (NULL);
-	ctx = make_context_zero();
+	ctx = NULL;
+	if (cfg)
+		ctx = make_context_zero();
 	if (ctx)
 	{
 		ctx->cfg = cfg;
 		ctx->forks = make_context_mutexes(cfg->population);
 		if (ctx->forks == NULL)
 			return (free(ctx), NULL);
-		if (pthread_mutex_init(&ctx->printf, NULL) != 0)
+		if (!mutex_create(&ctx->printf))
 			return (make_context_mutexes_cleanup(ctx->forks, cfg->population)
 				, free(ctx), NULL);
-		ctx->do_wait = true;
-		ctx->do_simulate = true;
+		if (!mutex_create(&ctx->sync))
+			return (pthread_mutex_destroy(&ctx->sync),
+				make_context_mutexes_cleanup(ctx->forks, cfg->population)
+				, free(ctx), NULL);
+		mutex_lock(&ctx->sync);
+			ctx->do_wait = true;
+			ctx->do_simulate = true;
+		mutex_unlock(&ctx->sync);
 		ctx->threads = make_context_threads(ctx, cfg->population);
 	}
 	return (ctx);

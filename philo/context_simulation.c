@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:12:05 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/06 13:58:27 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:41:07 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static int	pre_simulate_context(t_context *ctx, t_config *cfg)
 {
 	if (ctx == NULL || cfg == NULL)
 		return (1);
-	ctx->do_wait = false;
-	ctx->do_simulate = true;
+	mutex_set_bool(&ctx->sync, &ctx->do_wait, false);
 	return (0);
 }
 

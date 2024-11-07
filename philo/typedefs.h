@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:46:31 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/06 13:46:56 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:04:02 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef TYPEDEFS_H
@@ -36,6 +36,7 @@ typedef struct s_context
 	t_thread	*threads;
 	t_mutex		*forks;
 	t_mutex		printf;
+	t_mutex		sync;
 	bool		do_simulate;
 	bool		do_wait;
 }	t_context;
@@ -45,4 +46,6 @@ typedef struct s_thread_args
 	long		id;
 	t_context	*ctx;
 }	t_thread_args;
+
+typedef t_thread_args *(*t_thread_fn)(t_thread_args *);
 #endif
