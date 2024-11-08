@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:16:23 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/07 16:41:00 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/07 16:46:30 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ bool	simulate_think(t_thread_args *args)
 
 	ctx = args->ctx;
 	print(&ctx->printf, args->id, PRINT_THINK);
-	thread_sleep(1);
 	return (simulate_thread_test(args, 0));
 }
 
