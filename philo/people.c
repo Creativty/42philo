@@ -1,41 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   alloc.c                                            :+:      :+:    :+:   */
+/*   people.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/17 15:27:01 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/17 16:36:01 by aindjare         ###   ########.fr       */
+/*   Created: 2024/11/17 17:41:16 by aindjare          #+#    #+#             */
+/*   Updated: 2024/11/17 17:58:22 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-unsigned long	zero(char *region, unsigned long size)
+void	delete_people(t_result_person *people, long count)
 {
-	unsigned long	i;
+	long	i;
 
-	i = 0;
-	while (i < size)
-		region[i++] = '\0';
-	return (i);
+	if (people)
+	{
+		i = 0;
+		while (i < count)
+			delete_person(people[i++]);
+		free(people);
+	}
 }
 
-void	*new(unsigned long unit, unsigned long count)
+t_result_person	*make_people(long count, void *dependency)
 {
-	static long	counter = 0;
-	void		*allocation;
+	long			i;
+	t_result_person	*people;
 
-	if (counter == -1)
+	if (dependency == NULL)
 		return (NULL);
-	if (SIZE_MAX / count < unit)
-		return (NULL);
-	allocation = malloc(unit * count);
-	if (allocation)
+	people = new(sizeof(t_result_person), count);
+	if (people)
 	{
-		zero(allocation, unit * count);
-		counter++;
+		i = 0;
+		while (i < count)
+		{
+			people[i] = make_person(i + 1);
+			i++;
+		}
 	}
-	return (allocation);
+	return (people);
 }

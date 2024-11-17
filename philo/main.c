@@ -6,33 +6,41 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:05:07 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/17 15:51:10 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/17 17:55:58 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	join_thread(t_thread thread)
+t_stage		make_stage(t_parameters params)
 {
-	pthread_join(thread, NULL);
+	t_stage	stage;
+
+	stage.forks = make_forks(params.population, &stage);
+	stage.people = make_people(params.population, stage.forks);
+	stage.params = params;
+	stage.instant = now();
+	return (stage);
 }
 
 int	main(int argc, char **argv)
 {
-	// t_stage			*stage;
+	t_stage				stage;
 	t_result_parameters	params;
 
-	// Parse arguments
-		// check arguments length to be in range [4, 5]
-		// atol on all arguments with -1 representing failure
 	params = make_parameters(argc - 1, &argv[1]);
-	// Verify arguments
-		// if error stop program
 	if (!params.ok)
 		return (printf("[error]: incorrect arguments\n"), 1);
 	printf("[debug]: parameters "FMT_PARAMS"\n",
-			params.data.population, params.data.time_die, params.data.time_eat,
-			params.data.time_sleep, params.data.cycle_max);
+		params.data.population, params.data.time_die, params.data.time_eat,
+		params.data.time_sleep, params.data.cycle_max);
+	stage = make_stage(params.data);
+	printf("[debug]: instant %ld\n", stage.instant);
+	// forks = make_forks(params.data.population);
+	// if (forks == NULL)
+	// 	return (printf("[error]: allocation failure\n"), 1);
+	// delete_forks(forks, params.data.population);
+
 	// Create table
 		// people is an array of { fork, id, eat_stamp }
 		// sync lock dedicated for all actions that are to be visible

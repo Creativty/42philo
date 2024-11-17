@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:33:30 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/17 15:51:25 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/17 17:56:20 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ static long	parse_parameter(char *arg)
 		return (-1);
 	return (n);
 }
-
-#define RESULT_OK(TYPE, data) (t_result_ ## TYPE){ true, data }
-#define RESULT_FAIL(TYPE, data) (t_result_ ## TYPE){ false, data }
 
 static bool	make_parameters_failure(t_parameters params, int argc)
 {
@@ -40,7 +37,7 @@ t_result_parameters	make_parameters(int argc, char **argv)
 {
 	t_parameters	params;
 
-	bzero(&params, sizeof(t_parameters)); // TODO(XENOBAS): polyfill
+	zero((void *)&params, sizeof(t_parameters)); // TODO(XENOBAS): polyfill
 	if (argc != 4 && argc != 5)
 		return (RESULT_FAIL(parameters, params));
 	params.population = parse_parameter(argv[0]);

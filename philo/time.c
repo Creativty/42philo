@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   now.c                                              :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:26:31 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/17 15:35:29 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/17 18:03:15 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,13 @@ long	now(void)
 	if (gettimeofday(&tv, NULL) != 0)
 		return (0);
 	return ((long)tv.tv_sec * 1000l + (long)tv.tv_usec / 1000l);
+}
+
+void	sleep(long ms)
+{
+	long	start;
+
+	start = now();
+	while (now() - start < ms)
+		;
 }

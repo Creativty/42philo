@@ -6,7 +6,7 @@
 #    By: aindjare <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/07 17:40:26 by aindjare          #+#    #+#              #
-#    Updated: 2024/11/17 15:45:08 by aindjare         ###   ########.fr        #
+#    Updated: 2024/11/17 18:02:43 by aindjare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC		:=	cc
 CFLAGS	:=	-Wall -Wextra -Werror -O0
 
 NAME	:=	philo
-OBJECTS	:=	main.o alloc.o now.o parameters.o
+OBJECTS	:=	main.o alloc.o time.o parameters.o mutex.o person.o people.o
 
 all: $(NAME)
 

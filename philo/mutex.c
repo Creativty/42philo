@@ -6,31 +6,39 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 15:31:28 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/17 15:32:31 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/17 16:21:20 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-bool	make_mutex(t_mutex *mutex)
+t_result_mutex	make_mutex(void)
 {
-	return (pthread_mutex_init(&mutex, NULL) == 0)
+	t_mutex	m;
+
+	if (pthread_mutex_init(&m, NULL) != 0)
+		return (RESULT_FAIL(mutex, m));
+	return (RESULT_OK(mutex, m));
 }
 
-bool	delete_mutex(t_mutex *mutex)
+void	delete_mutex(t_result_mutex m)
 {
-	if (pthread_mutex_destroy(mutex) != 0)
-		return (false);
-	bzero(mutex, sizeof(t_mutex));
-	return (true);
+	if (!m.ok)
+		return ;
+	pthread_mutex_destroy(&m.data);
+	zero((void *)&m.data, sizeof(t_mutex));
 }
 
-bool	lock_mutex(t_mutex *mutex)
+void	lock_mutex(t_result_mutex m)
 {
-	return (pthread_mutex_lock(mutex) == 0);
+	if (m.ok == false)
+		return ;
+	pthread_mutex_lock(&m.data);
 }
 
-bool	unlock_mutex(t_mutex *mutex)
+void	unlock_mutex(t_result_mutex m)
 {
-	return (pthread_mutex_unlock(mutex) == 0);
+	if (m.ok == false)
+		return ;
+	pthread_mutex_lock(&m.data);
 }
