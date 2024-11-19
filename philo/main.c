@@ -6,26 +6,30 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:05:07 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/17 17:55:58 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:37:14 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_stage		make_stage(t_parameters params)
+t_stage	*make_stage(t_parameters params)
 {
-	t_stage	stage;
+	t_stage	*stage;
 
-	stage.forks = make_forks(params.population, &stage);
-	stage.people = make_people(params.population, stage.forks);
-	stage.params = params;
-	stage.instant = now();
+	stage = new(sizeof(t_stage), 1);
+	if (stage)
+	{
+		stage->forks = make_forks(params.population, stage);
+		stage->people = make_people(params.population, stage, stage->forks);
+		stage->params = params;
+		stage->instant = now();
+	}
 	return (stage);
 }
 
 int	main(int argc, char **argv)
 {
-	t_stage				stage;
+	t_stage				*stage;
 	t_result_parameters	params;
 
 	params = make_parameters(argc - 1, &argv[1]);
@@ -35,7 +39,9 @@ int	main(int argc, char **argv)
 		params.data.population, params.data.time_die, params.data.time_eat,
 		params.data.time_sleep, params.data.cycle_max);
 	stage = make_stage(params.data);
-	printf("[debug]: instant %ld\n", stage.instant);
+	if (stage == NULL)
+		return (printf("[error]: could not allocate the table\n"), 1);
+	printf("[debug]: instant %ld\n", stage->instant);
 	// forks = make_forks(params.data.population);
 	// if (forks == NULL)
 	// 	return (printf("[error]: allocation failure\n"), 1);

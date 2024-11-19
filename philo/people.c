@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 17:41:16 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/17 17:58:22 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:34:20 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	delete_people(t_result_person *people, long count)
 	}
 }
 
-t_result_person	*make_people(long count, void *dependency)
+t_result_person	*make_people(long count, void *arg, void *dependency)
 {
 	long			i;
 	t_result_person	*people;
@@ -38,7 +38,7 @@ t_result_person	*make_people(long count, void *dependency)
 		i = 0;
 		while (i < count)
 		{
-			people[i] = make_person(i + 1);
+			people[i] = make_person(i + 1, arg);
 			i++;
 		}
 	}
