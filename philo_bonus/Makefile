@@ -6,7 +6,7 @@
 #    By: aindjare <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 09:45:16 by aindjare          #+#    #+#              #
-#    Updated: 2024/11/06 09:50:27 by aindjare         ###   ########.fr        #
+#    Updated: 2024/11/22 17:00:56 by aindjare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,17 @@ all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	$(CC) $(CFLAGS) -pthread -o $@ $^
+
+debug: CFLAGS += -g
+debug: re
+	valgrind ./$(NAME) $(PARAM_PHILO)
+
+sanitize: CFLAGS += -g -fsanitize=thread
+sanitize: re
+	./$(NAME) $(PARAM_PHILO)
+
+test: all
+	./$(NAME) $(PARAM_PHILO)
 
 clean:
 	$(RM) $(OBJECTS)
