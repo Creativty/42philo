@@ -6,11 +6,28 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:35:24 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 10:38:59 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:03:03 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shared.h"
+
+t_person	*make_people(unsigned long count)
+{
+	unsigned long	i;
+	t_person		*p;
+
+	i = 0;
+	p = malloc(sizeof(t_person) * count);
+	while (p && i < count)
+	{
+		p[i].id = i + 1;
+		p[i].cycle = 0;
+		p[i].last_eat = -1;
+		i++;
+	}
+	return (p);
+}
 
 t_mutex	*person_fork(t_person *p, long delta)
 {

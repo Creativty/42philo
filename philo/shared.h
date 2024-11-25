@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:33:36 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 10:40:06 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:03:21 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,12 @@ bool		person_do_stop(t_person *p, long timestamp);
 
 t_shared	make_shared(int argc, char **argv);
 int			test_shared(t_shared s, bool do_test_cycles);
+void		delete_shared(t_shared s);
+
+t_mutex		*make_mutex(unsigned long count);
+void		delete_mutexes(t_mutex *m, long count);
+
+t_person	*make_people(unsigned long count);
 
 void		print(t_person *p, char *msg, long timestamp);
 void		print_shared(t_shared s);
