@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:33:36 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 11:03:21 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:05:35 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ typedef struct s_shared
 bool		is_sign(char rune);
 bool		is_digit(char rune);
 bool		is_space(char rune);
-        	
+
 long		math_abs(long a);
 long		math_max(long a, long b);
 long		math_parse_long(char *str);
-        	
+
 void		*routine(void *arg);
 bool		routine_eat(t_person *p);
 bool		routine_sleep(t_person *p);
@@ -65,7 +65,7 @@ bool		routine_think(t_person *p);
 void		mem_zero(void *memory, unsigned long size);
 long		time_now(void);
 void		thread_sleep(long duration_ms);
-        	
+
 t_mutex		*person_fork(t_person *p, long delta);
 void		person_fork_hold(t_person *p, long delta);
 void		person_fork_drop(t_person *p, long delta);

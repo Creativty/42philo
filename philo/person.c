@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:35:24 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 11:03:03 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:05:10 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,12 @@ void	person_fork_drop(t_person *p, long delta)
 bool	person_do_stop(t_person *p, long timestamp)
 {
 	bool	do_stop;
+	bool	did_die;
 
 	pthread_mutex_lock(p->shared->sync);
-	do_stop = p->shared->death || (p->last_eat != -1 && time_now() - p->last_eat >= p->shared->time_death);
+	did_die = (p->last_eat != -1
+			&& time_now() - p->last_eat >= p->shared->time_death);
+	do_stop = (p->shared->death || did_die);
 	if (do_stop && p->shared->death == false)
 		print(p, "has died", timestamp);
 	p->shared->death = p->shared->death || do_stop;
