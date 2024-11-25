@@ -5,31 +5,34 @@
 #                                                     +:+ +:+         +:+      #
 #    By: aindjare <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/11/07 17:40:26 by aindjare          #+#    #+#              #
-#    Updated: 2024/11/19 10:38:02 by aindjare         ###   ########.fr        #
+#    Created: 2024/11/06 09:45:16 by aindjare          #+#    #+#              #
+#    Updated: 2024/11/25 09:08:00 by aindjare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+CC		:=	cc
+CFLAGS	:=	-Wall -Wextra -Werror
 RM		:=	rm -rf
 
-CC		:=	cc
-CFLAGS	:=	-Wall -Wextra -Werror -O0 -g
-
 NAME	:=	philo
-OBJECTS	:=	main.o alloc.o time.o parameters.o mutex.o person.o people.o forks.o
+SOURCES	:=	$(wildcard *.c)
+OBJECTS	:=	$(SOURCES:%.c=%.o)
 
 all: $(NAME)
 
+$(NAME): $(OBJECTS)
+	$(CC) $(CFLAGS) -pthread -o $@ $^
+
 debug: CFLAGS += -g
 debug: re
-	valgrind ./$(NAME) 5 300 100 100
+	valgrind ./$(NAME) $(PARAM_PHILO)
 
 sanitize: CFLAGS += -g -fsanitize=thread
 sanitize: re
-	./$(NAME) 5 300 100 100
+	./$(NAME) $(PARAM_PHILO)
 
-$(NAME): $(OBJECTS)
-	$(CC) $(CFLAGS) -pthread $^ -o $@
+test: all
+	./$(NAME) $(PARAM_PHILO)
 
 clean:
 	$(RM) $(OBJECTS)
