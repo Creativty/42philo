@@ -6,17 +6,18 @@
 #    By: aindjare <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 09:45:16 by aindjare          #+#    #+#              #
-#    Updated: 2024/11/25 09:08:00 by aindjare         ###   ########.fr        #
+#    Updated: 2024/11/25 09:33:39 by aindjare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC		:=	cc
-CFLAGS	:=	-Wall -Wextra -Werror
-RM		:=	rm -rf
-
-NAME	:=	philo
-SOURCES	:=	$(wildcard *.c)
-OBJECTS	:=	$(SOURCES:%.c=%.o)
+CC			:=	cc
+CFLAGS		:=	-Wall -Wextra -Werror
+RM			:=	rm -rf
+        	
+NAME		:=	philo
+SOURCES		:=	$(wildcard *.c)
+OBJECTS		:=	$(SOURCES:%.c=%.o)
+PARAM_PHILO	:=	50 300 100 50
 
 all: $(NAME)
 

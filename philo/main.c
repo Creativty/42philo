@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 16:55:42 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/24 17:44:16 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:32:11 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,20 @@ typedef struct s_shared
 	long		time_death;
 }	t_shared;
 
+long	math_max(long a, long b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+long	math_abs(long a)
+{
+	if (-a >= 0)
+		return (-a);
+	return (a);
+}
+
 void	mem_zero(void *memory, unsigned long size)
 {
 	unsigned long	i;
@@ -71,76 +85,110 @@ void	thread_sleep(long duration_ms)
 	long	instant_start;
 
 	instant_start = time_now();
-	while (1)
-		if (time_now() - instant_start >= duration_ms)
-			break ;
+	while (time_now() - instant_start < duration_ms) ;
 }
 
-void	print(t_person *p, char *msg)
+void	print(t_person *p, char *msg, long timestamp)
 {
 	t_mutex		*lock;
 
 	lock = p->shared->print;
 	pthread_mutex_lock(lock);
-	printf("%ld %ld %s\n", time_now() - p->shared->instant_start, p->id, msg);
+	printf("%ld %ld %s\n", timestamp - p->shared->instant_start, p->id, msg);
 	pthread_mutex_unlock(lock);
 }
 
-bool	routine_is_dead(t_person *p)
+void	print_variadic(t_person *p, char *fmt, ...)
+{
+	char		buff[256];
+	va_list		ap;
+	t_mutex		*lock;
+
+	va_start(ap, fmt);
+	snprintf(buff, 256, "%ld %ld %s\n", time_now() - p->shared->instant_start, p->id, fmt);
+	lock = p->shared->print;
+	pthread_mutex_lock(lock);
+		vprintf(buff, ap);
+	pthread_mutex_unlock(lock);
+	va_end(ap);
+}
+
+bool	person_do_stop(t_person *p, long timestamp)
 {
 	bool	do_stop;
 
 	pthread_mutex_lock(p->shared->sync);
 	do_stop = p->shared->death || (p->last_eat != -1 && time_now() - p->last_eat >= p->shared->time_death);
-	if (!p->shared->death && do_stop) {
-		p->shared->death = true;
-		print(p, "has died");
-	}
+	if (do_stop && p->shared->death == false)
+		print(p, "has died", timestamp);
+	p->shared->death = p->shared->death || do_stop;
 	pthread_mutex_unlock(p->shared->sync);
 	return (do_stop);
 }
 
+bool	print_while_alive(t_person *p, char *msg, long timestamp)
+{
+	if (person_do_stop(p, timestamp) == false)
+		return (print(p, msg, timestamp), false);
+	return (true);
+}
+
+t_mutex	*person_fork(t_person *p, long delta)
+{
+	return (&p->shared->forks[(p->id + delta) % p->shared->count]);
+}
+
+void	person_fork_hold(t_person *p, long delta)
+{
+	t_mutex	*fork;
+
+	fork = person_fork(p, delta);
+	pthread_mutex_lock(fork);
+}
+
+void	person_fork_drop(t_person *p, long delta)
+{
+	t_mutex	*fork;
+
+	fork = person_fork(p, delta);
+	pthread_mutex_unlock(fork);
+}
+
 bool	routine_eat(t_person *p)
 {
-	if (routine_is_dead(p))
+	if (person_do_stop(p, time_now()))
 		return (true);
-	pthread_mutex_lock(&p->shared->forks[(p->id - 1) % p->shared->count]);
-	print(p, "has picked a fork");
-	if (routine_is_dead(p))
-		return (pthread_mutex_unlock(&p->shared->forks[(p->id - 1) % p->shared->count]), true);
-	pthread_mutex_lock(&p->shared->forks[(p->id + 0) % p->shared->count]);
-	if (routine_is_dead(p))
-		return (pthread_mutex_unlock(&p->shared->forks[(p->id - 1) % p->shared->count]), pthread_mutex_unlock(&p->shared->forks[(p->id + 0) % p->shared->count]), true);
-	print(p, "has picked a fork");
-	if (!routine_is_dead(p))
-	{
-		print(p, "is eating");
-		thread_sleep(p->shared->time_eat);
-		p->last_eat = time_now();
-		p->cycle++;
-	}
-	pthread_mutex_unlock(&p->shared->forks[(p->id + 0) % p->shared->count]);
-	pthread_mutex_unlock(&p->shared->forks[(p->id - 1) % p->shared->count]);
+	person_fork_hold(p, +0);
+	if (person_do_stop(p, time_now()))
+		return (person_fork_drop(p, +0), true);
+	print(p, "has picked a fork", time_now());
+	person_fork_hold(p, -1);
+	if (person_do_stop(p, time_now()))
+		return (person_fork_drop(p, -1), person_fork_drop(p, +0), true);
+	print(p, "has picked a fork", time_now());
+	if (person_do_stop(p, time_now()))
+		return (person_fork_drop(p, -1), person_fork_drop(p, +0), true);
+	print(p, "is eating", time_now());
+	p->last_eat = time_now();
+	thread_sleep(p->shared->time_eat);
+	p->cycle += 1;
 	if (p->shared->cycles > -1 && p->shared->cycles <= p->cycle)
-		return (true);
-	return (routine_is_dead(p));
+		return (person_fork_drop(p, -1), person_fork_drop(p, +0), true);
+	return (person_fork_drop(p, -1), person_fork_drop(p, +0), person_do_stop(p, time_now()));
 }
 
 bool	routine_sleep(t_person *p)
 {
-	if (routine_is_dead(p))
-		return (true);
-	print(p, "is sleeping");
-	thread_sleep(p->shared->time_sleep);
-	return (routine_is_dead(p));
+	if (print_while_alive(p, "is sleeping", time_now()) == false)
+		thread_sleep(p->shared->time_sleep);
+	return (person_do_stop(p, time_now()));
 }
 
 bool	routine_think(t_person *p)
 {
-	if (routine_is_dead(p))
-		return (true);
-	print(p, "is thinking");
-	return (routine_is_dead(p));
+	if (!person_do_stop(p, time_now()))
+		print(p, "is thinking", time_now());
+	return (person_do_stop(p, time_now()));
 }
 
 void	*routine(void *arg)
@@ -149,7 +197,8 @@ void	*routine(void *arg)
 
 	p = (t_person *)arg;
 	if (p->id % 2 == 1)
-		thread_sleep(p->shared->time_eat / 4);
+		thread_sleep(5);
+	p->last_eat = time_now();
 	while (1)
 	{
 		if (routine_eat(p))
@@ -231,14 +280,28 @@ int	test_shared(t_shared s, bool do_test_cycles)
 			|| s.time_death == -1 || s.time_sleep == -1);
 }
 
+void	print_shared(t_shared s)
+{
+	printf("< count = %ld,", s.count);
+	printf(" time_death = %ld,", s.time_death);
+	printf(" time_eat = %ld,", s.time_eat);
+	printf(" time_sleep = %ld,", s.time_sleep);
+	printf(" cycles = %ld >\n", s.cycles);
+}
+
 int	main(int argc, char **argv)
 {
 	t_shared	s;
 
+	// printf("stamp: %ld\n", time_now());
+	// thread_sleep(1000);
+	// printf("stamp: %ld\n", time_now());
+	// return (1);
 	// Allocation
 	s = make_shared(argc - 1, &argv[1]);
 	if (test_shared(s, argc == 6))
 		return (fprintf(stderr, "error: wrong arguments\n"), 1);
+	print_shared(s);
 	/* Old method
 		s.count = 3;
 		s.death = false;
@@ -271,9 +334,8 @@ int	main(int argc, char **argv)
 		if (s.people == NULL)
 			return (fprintf(stderr, "error: malloc `s.people`\n"), 1);
 		for (int i = 0; i < s.count; i++) {
-			mem_zero(&s.people[i], sizeof(t_person));
-
 			s.people[i].id = i + 1;
+			s.people[i].cycle = 0;
 			s.people[i].shared = &s;
 			s.people[i].last_eat = -1;
 		}
