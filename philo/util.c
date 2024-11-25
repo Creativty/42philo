@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:35:09 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 10:42:07 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:04:06 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,5 @@ void	thread_sleep(long duration_ms)
 
 	instant_start = time_now();
 	while (time_now() - instant_start < duration_ms)
-		;
+		usleep(5);
 }

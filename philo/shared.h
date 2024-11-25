@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:33:36 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 11:05:35 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:51:49 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <limits.h>
 # include <stddef.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <stdbool.h>
 # include <pthread.h>
 # include <sys/time.h>
