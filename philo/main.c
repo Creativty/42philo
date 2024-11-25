@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 16:55:42 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 11:03:23 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:43:11 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	init_people(t_shared *s)
 {
 	long	i;
 
-	i = 0;
 	if (s->instant_start == -1)
 		return ;
+	i = 0;
 	while (i < s->count)
 	{
 		s->people[i].shared = s;
@@ -31,9 +31,9 @@ void	await_people(t_shared *s)
 {
 	long	i;
 
-	i = 0;
 	if (s->instant_start == -1)
 		return ;
+	i = 0;
 	while (i < s->count)
 		pthread_join(s->people[i++].thread, NULL);
 }
@@ -45,6 +45,5 @@ int	main(int argc, char **argv)
 	s = make_shared(argc - 1, &argv[1]);
 	init_people(&s);
 	await_people(&s);
-	delete_shared(s);
 	return (delete_shared(s), 0);
 }
