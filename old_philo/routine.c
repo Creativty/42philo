@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:35:58 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 14:06:06 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:16:22 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ bool	routine_eat_left(t_person *p)
 
 bool	routine_sleep(t_person *p)
 {
-	if (print_while_alive(p, "is sleeping", time_now()) == false)
+	if (!person_do_stop(p, time_now()))
+		print(p, "is sleeping", time_now());
+	if (!person_do_stop(p, time_now()))
 		thread_sleep(p->shared->time_sleep);
 	return (person_do_stop(p, time_now()));
 }

@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:33:36 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 13:51:49 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:23:58 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void		delete_mutexes(t_mutex *m, long count);
 t_person	*make_people(unsigned long count);
 
 void		print(t_person *p, char *msg, long timestamp);
+void		print_death(t_person *p, char *msg, long timestamp);
 void		print_shared(t_shared s);
 bool		print_while_alive(t_person *p, char *msg, long timestamp);
 #endif

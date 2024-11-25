@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:35:24 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 11:05:10 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:24:03 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,16 @@ bool	person_do_stop(t_person *p, long timestamp)
 {
 	bool	do_stop;
 	bool	did_die;
+	bool	already_dead;
 
 	pthread_mutex_lock(p->shared->sync);
 	did_die = (p->last_eat != -1
 			&& time_now() - p->last_eat >= p->shared->time_death);
 	do_stop = (p->shared->death || did_die);
-	if (do_stop && p->shared->death == false)
-		print(p, "has died", timestamp);
-	p->shared->death = p->shared->death || do_stop;
+	already_dead = p->shared->death;
+	p->shared->death = already_dead || do_stop;
+	if (do_stop && !already_dead)
+		print_death(p, "has died", timestamp);
 	pthread_mutex_unlock(p->shared->sync);
 	return (do_stop);
 }
