@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rune.c                                             :+:      :+:    :+:   */
+/*   instant.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 10:36:38 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 14:30:12 by aindjare         ###   ########.fr       */
+/*   Created: 2024/11/25 15:25:27 by aindjare          #+#    #+#             */
+/*   Updated: 2024/11/25 15:39:38 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shared.h"
 
-bool	is_space(char rune)
+t_ulong	instant_now(void)
 {
-	return (rune == ' ' || rune == '\f' || rune == '\n'
-		|| rune == '\r' || rune == '\t' || rune == '\v');
+	int				retval;
+	struct timeval	tv;
+
+	retval = gettimeofday(&tv, NULL);
+	if (retval == -1)
+		return ((t_ulong)LONG_MAX);
+	return ((t_ulong)tv.tv_sec * 1000ul + (t_ulong)tv.tv_usec / 1000ul);
 }
 
-bool	is_sign(char rune)
+t_ulong	instant_sleep(t_ulong duration_millis)
 {
-	return (rune == '+' || rune == '-');
-}
+	t_ulong	instant_start;
 
-bool	is_digit(char rune)
-{
-	return (rune >= '0' && rune <= '9');
+	instant_start = instant_now();
+	while (instant_now() - instant_start < duration_millis)
+		;
+	return (instant_now());
 }

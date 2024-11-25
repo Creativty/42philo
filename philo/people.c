@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rune.c                                             :+:      :+:    :+:   */
+/*   people.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 10:36:38 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 14:30:12 by aindjare         ###   ########.fr       */
+/*   Created: 2024/11/25 15:12:27 by aindjare          #+#    #+#             */
+/*   Updated: 2024/11/25 15:54:59 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shared.h"
 
-bool	is_space(char rune)
+t_person	*make_people(t_ulong count)
 {
-	return (rune == ' ' || rune == '\f' || rune == '\n'
-		|| rune == '\r' || rune == '\t' || rune == '\v');
+	t_ulong		i;
+	t_person	*people;
+
+	i = 0ul;
+	people = malloc(sizeof(t_person) * count);
+	while (people && i < count)
+	{
+		people[i].id = i + 1;
+		people[i].data = NULL;
+		people[i].instant_eat = -1;
+		people[i].instant_start = -1;
+		i++;
+	}
+	return (people);
 }
 
-bool	is_sign(char rune)
+void	delete_people(t_person *people)
 {
-	return (rune == '+' || rune == '-');
-}
-
-bool	is_digit(char rune)
-{
-	return (rune >= '0' && rune <= '9');
+	free(people);
 }
