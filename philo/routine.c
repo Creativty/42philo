@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:35:58 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 10:36:06 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:41:32 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ bool	routine_eat(t_person *p)
 	p->cycle += 1;
 	if (p->shared->cycles > -1 && p->shared->cycles <= p->cycle)
 		return (person_fork_drop(p, -1), person_fork_drop(p, +0), true);
-	return (person_fork_drop(p, -1), person_fork_drop(p, +0), person_do_stop(p, time_now()));
+	return (person_fork_drop(p, -1), person_fork_drop(p, +0),
+		person_do_stop(p, time_now()));
 }
 
 bool	routine_sleep(t_person *p)

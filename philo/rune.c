@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:36:38 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 10:36:44 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:41:48 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 bool	is_space(char rune)
 {
-	return (rune == ' ' || rune == '\n' || rune == '\r' || rune == '\v' || rune == '\f');
+	return (rune == ' ' || rune == '\n' || rune == '\r'
+		|| rune == '\v' || rune == '\f');
 }
 
 bool	is_sign(char rune)

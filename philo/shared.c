@@ -6,7 +6,7 @@
 /*   By: aindjare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:37:59 by aindjare          #+#    #+#             */
-/*   Updated: 2024/11/25 10:38:02 by aindjare         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:41:54 by aindjare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	test_shared(t_shared s, bool do_test_cycles)
 	if (do_test_cycles && s.cycles == -1)
 		return (true);
 	return (s.count == -1 || s.time_eat == -1
-			|| s.time_death == -1 || s.time_sleep == -1);
+		|| s.time_death == -1 || s.time_sleep == -1);
 }
 
 void	print_shared(t_shared s)
