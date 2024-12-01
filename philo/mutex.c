@@ -6,7 +6,7 @@
 /*   By: abderrahim <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 18:58:37 by abderrahim        #+#    #+#             */
-/*   Updated: 2024/12/01 19:08:01 by abderrahim       ###   ########.fr       */
+/*   Updated: 2024/12/01 19:53:46 by abderrahim       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_mutex	*mutex_make(t_ulong count)
 	m = (t_mutex *)malloc(sizeof(t_mutex) * count);
 	ok = !!m;
 	while (i < count && ok)
-		ok = (pthread_mutex_init(&m[i], NULL) == 0);
+		ok = (pthread_mutex_init(&m[i++], NULL) == 0);
 	if (ok)
 		return (m);
 	return (mutex_delete(m, i), NULL);

@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   mem.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abderrahim <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/01 18:47:13 by abderrahim        #+#    #+#             */
-/*   Updated: 2024/12/01 20:03:26 by abderrahim       ###   ########.fr       */
+/*   Created: 2024/12/01 19:42:43 by abderrahim        #+#    #+#             */
+/*   Updated: 2024/12/01 19:44:32 by abderrahim       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stdio.h>
 
-int	main(const int argc, const char **argv)
+void	mem_fill(void *mem, t_ulong len, unsigned char byte)
 {
-	t_args_result	args;
-	t_data_result	data;
+	t_ulong	i;
 
-	args = args_parse(argc - 1, &argv[1]);
-	if (args.ok == false)
-		return (printf("error: could not parse arguments\n"), 1);
-	data = data_make(args, (argc - 1) == 5);
-	if (data.ok == false)
-		return (printf("error: could not prepare the dining table\n"), 1);
-	data_init(&data);
-	data_delete(&data);
-	return (0);
+	i = 0;
+	while (mem && i < len)
+		((unsigned char *)mem)[i++] = byte;
+}
+
+void	mem_copy(void *src, void *dst, t_ulong len)
+{
+	t_ulong	i;
+
+	i = 0;
+	while (src && dst && i < len)
+	{
+		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+		i++;
+	}
 }

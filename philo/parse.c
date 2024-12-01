@@ -6,7 +6,7 @@
 /*   By: abderrahim <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 19:11:21 by abderrahim        #+#    #+#             */
-/*   Updated: 2024/12/01 19:33:50 by abderrahim       ###   ########.fr       */
+/*   Updated: 2024/12/01 20:03:14 by abderrahim       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static long parse_param(const char *str)
 	return (-1);
 }
 
-static void	try_parse_param(const char *str, t_parse_result *p, t_ulong *out)
+static void	try_parse_param(const char *str, t_args_result *p, t_ulong *out)
 {
 	long	n;
 
@@ -50,10 +50,11 @@ static void	try_parse_param(const char *str, t_parse_result *p, t_ulong *out)
 		*out = (t_ulong)n;
 }
 
-t_parse_result		parse(const int argc, const char **argv)
+t_args_result		args_parse(const int argc, const char **argv)
 {
-	t_parse_result	p;
+	t_args_result	p;
 
+	mem_fill(&p, sizeof(t_args_result), '\0');
 	p.ok = (argv != NULL && (argc == 4 || argc == 5));
 	try_parse_param(argv[0], &p, &p.count);
 	try_parse_param(argv[1], &p, &p.dt_die);
