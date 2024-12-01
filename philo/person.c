@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   person.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abderrahim <marvin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/01 18:47:13 by abderrahim        #+#    #+#             */
-/*   Updated: 2024/12/01 20:32:19 by abderrahim       ###   ########.fr       */
+/*   Created: 2024/12/01 20:28:20 by abderrahim        #+#    #+#             */
+/*   Updated: 2024/12/01 20:31:34 by abderrahim       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <stdio.h>
 
-int	main(const int argc, const char **argv)
+void	*person_routine(void *x)
 {
-	t_args_result	args;
-	t_data_result	data;
+	t_person	*p;
 
-	args = args_parse(argc - 1, &argv[1]);
-	if (args.ok == false)
-		return (printf("error: could not parse arguments\n"), 1);
-	data = data_make(args, (argc - 1) == 5);
-	if (data.ok == false)
-		return (printf("error: could not prepare the dining table\n"), 1);
-	data_init(&data);
-	data_await(&data);
-	data_delete(&data);
-	return (0);
+	p = (t_person *)x;
+	if (p == NULL)
+		return (NULL);
+	mutex_lock(p->d->lock_sync);
+	printf("%lu says hi\n", p->id);
+	mutex_unlock(p->d->lock_sync);
+	return (NULL);
 }
